@@ -1,7 +1,44 @@
+import { useState } from "react"
+import Button from "../components/Button"
 import Input from "../components/Input"
+import { api } from "../api/api"
+import { Link, useNavigate } from "react-router-dom"
+import { useUserStore } from "../store/useUserStore"
+
+
 
 
 const Register = () => {
+    const [error, setError] = useState("")
+
+    const navigate = useNavigate()
+    const { setSession } = useUserStore()
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setError("")
+
+        if (e.target.password.value !== e.target.password2.value) {
+            setError("Пароли не совпадают")
+            return
+        }
+
+        const user = {
+            username: e.target.username.value,
+            email: e.target.email.value,
+            password: e.target.password.value
+        }
+
+        try {
+            const data = await api.registerUser(user)
+            setSession(data.data)
+            navigate("/")
+        } catch (error) {
+            setError(error.message)
+            console.error(error)
+        }
+    }
+
     return (
         <div className="container">
 
@@ -15,8 +52,8 @@ const Register = () => {
         <div class="alert alert-error" id="error-alert">
             Такое имя пользователя уже занято
         </div>
-
-        <form id="register-form">
+        {error.length > 0 && <div className="auth-error">{error}</div>}
+        <form id="register-form" onSubmit={handleSubmit}>
             <div class="form-group">
                 <label class="form-label">Имя пользователя</label>
                 <Input 
@@ -67,7 +104,7 @@ const Register = () => {
                 <Input 
                     type="password" 
                     class="form-input" 
-                    name="confirmPassword"
+                    name="password2"
                     placeholder="Повторите пароль"
                     required
                     autocomplete="new-password"
@@ -75,13 +112,15 @@ const Register = () => {
                 <div class="form-error">Пароли не совпадают</div>
             </div>
 
-            <button type="submit" class="btn-submit">Зарегистрироваться</button>
+            <Button type="submit" class="btn-submit">Зарегистрироваться</Button>
         </form>
 
         <div class="auth-divider">или</div>
 
         <div class="auth-link">
-            Уже есть аккаунт? <a href="/login">Войти</a>
+            <p>
+                 <Link to={"/login"}>Войти</Link>
+            </p>
         </div>
     </div>
 

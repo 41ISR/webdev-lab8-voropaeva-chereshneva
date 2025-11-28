@@ -1,6 +1,28 @@
-import Input from "../components/Input"
+import { useItemStore } from "../store/useItemStore"
+import Input from "./Input"
+import { api } from "../api/api"
 
 const CreateItem = () => {
+     const { getItems } = useItemStore()
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        const item = { title: e.target.title.value,
+            description: e.target.description.value,
+            price: e.target.price.value,
+            imageUrl: e.target.imageUrl.value
+         }
+
+        try {
+            await api.sendItems(item)
+            await getItems()
+            e.target.reset()
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+
+
     return (
         <div className="container">
 
@@ -9,7 +31,7 @@ const CreateItem = () => {
     </div>
 
     <div class="form-container">
-        <form id="create-item-form">
+        <form id="create-item-form" onSubmit={handleSubmit}>
             <div class="form-group">
                 <label class="form-label">
                     Название товара <span class="required">*</span>

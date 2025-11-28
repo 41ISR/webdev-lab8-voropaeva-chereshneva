@@ -1,12 +1,42 @@
+import { Link, useNavigate } from "react-router-dom"
+import Button from "../components/Button"
 import Input from "../components/Input"
+import { useUserStore } from "../store/useUserStore"
+import { useState } from "react"
+import { api } from "../api/api"
 
 
 const Login = () => {
+    const [error, setError] = useState("")
+    const navigate = useNavigate()
+    const { setSession } = useUserStore()
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setError("")
+
+        const user = {
+            username: e.target.username.value,
+            password: e.target.password.value
+        }
+
+        try {
+            const data = await api.loginUser(user)
+            console.log(data);
+            
+            setSession(data.data)
+            navigate("/")
+        } catch (error) {
+            setError(error.response.data.error)
+            console.error(error)
+        }
+    }
+
     return (
         <div className="container">
 
         <div class="auth-container">
-
+            {error.length > 0 && <div className="auth-error">{error}</div>}
             <div class="auth-header">
                 <div class="auth-icon">🔐</div>
                 <h1 class="auth-title">Вход</h1>
@@ -17,7 +47,7 @@ const Login = () => {
                 Неверное имя пользователя или пароль
             </div>
 
-            <form id="login-form">
+            <form id="login-form" onSubmit={handleSubmit}>
                 <div class="form-group">
                     <label class="form-label">Имя пользователя</label>
                     <Input 
@@ -44,13 +74,13 @@ const Login = () => {
                     <div class="form-error">Введите пароль</div>
                 </div>
 
-                <button type="submit" class="btn-submit">Войти</button>
+                <Button type="submit" class="btn-submit">Войти</Button>
             </form>
 
         <div class="auth-divider">или</div>
 
         <div class="auth-link">
-            Нет аккаунта? <a href="/register">Зарегистрироваться</a>
+            Нет аккаунта? <Link to={"/register"}>Зарегистрироваться</Link>
         </div>
     </div>
     
