@@ -27,6 +27,7 @@ const Login = () => {
             setSession(data.data)
             navigate("/")
         } catch (error) {
+            console.log(error.response)
             setError(error.response.data.error)
             console.error(error)
         }

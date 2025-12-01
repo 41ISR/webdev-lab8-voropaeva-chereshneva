@@ -5,65 +5,68 @@ import { useEffect, useState } from "react"
 import { useItemStore } from "../store/useItemStore"
 
 const ItemDetail = () => {
-const {id} = useParams()
-const [ItemShow, setItemShow] = useState(undefined)
-const { items } = useItemStore()
+    const { id } = useParams()
+    const [ItemShow, setItemShow] = useState(undefined)
+    const { items, getItems } = useItemStore()
+    const {newBid, setNewBid} = useState()
+    useEffect(() => {
+        const fetch = async () => {
+            await getItems()
+        }
+        fetch()
+    }, [])
 
-useEffect(() => {
-     items && console.log(Object.keys(items.message))
-    items && setItemShow(Object.keys(items.message).filter((item) => item.toLowerCase().includes(id.toLowerCase())))
-}, []) 
+    useEffect(() => {
+        items && setItemShow(items.find((item) => item.id == id))
+    }, [items])
 
+    if (!ItemShow) return <></>
+
+
+
+    const handleBid = () => {
+
+    }
+    
     return (
         <div className="container">
 
-            {/* <Link to={"/"}>← Вернуться к списку товаров</Link>
+            <Link to={"/"}>← Вернуться к списку товаров</Link>
 
             <div class="item-detail">
                 <div class="item-header">
                     <div>
-                        <img src="https://via.placeholder.com/600x400/3498db/ffffff?text=Laptop" alt="Ноутбук Dell XPS 15" class="item-image-large" />
+                         <img src={ItemShow.imageUrl} class="item-image-large" />
                     </div>
 
                     <div class="item-info">
-                        <span class="item-status">Активно</span>
+                        <span class="item-status">{ItemShow.status}</span>
                             
-                        <h1 class="item-title-large">Ноутбук Dell XPS 15</h1>
+                        <h1 class="item-title-large">{ItemShow.title}</h1>
                             
                         <div class="item-seller-info">
                             <div class="seller-avatar">TS</div>
                             <div class="seller-details">
-                                <div class="seller-name">techseller</div>
-                                <div class="seller-date">Опубликовано: 15 октября 2025</div>
+                                <div class="seller-name">{ItemShow.username}</div>
+                                <div class="seller-date">{ItemShow.createdAt}</div>
                             </div>
                         </div>
 
                         <div class="item-description-full">
-                            Мощный ноутбук для работы и игр в отличном состоянии.        
-                            <strong>Характеристики:</strong>
-                            <ul>
-                                <li>Процессор: Intel Core i7-12700H (12 ядер)</li>
-                                <li>Оперативная память: 16GB DDR5</li>
-                                <li>Видеокарта: NVIDIA GeForce RTX 3050 (4GB)</li>
-                                <li>Накопитель: 512GB NVMe SSD</li>
-                                <li>Дисплей: 15.6" FHD (1920x1080), 144Hz</li>
-                                <li>Операционная система: Windows 11 Pro</li>
-                            </ul>
-                                Ноутбук используется около года, в идеальном состоянии. Все аксессуары в комплекте: зарядное устройство, коробка, документы. 
-                                Гарантия действует еще 1 год.
+                            {ItemShow.description}
                         </div>
 
                         <div class="price-section">
                             <div class="starting-price">Начальная цена:</div>
-                            <div class="current-price">65 000 ₽</div>
-                            <div class="highest-bid">Текущая ставка: 70 000 ₽</div>
+                            <div class="current-price">{ItemShow.price}</div>
+                            <div class="highest-bid">Текущая ставка: {ItemShow.highestBid}</div>
 
-                            <form class="bid-form">
+                            <form class="bid-form" onSubmit={handleBid}>
                                 <Input 
                                     type="number" 
                                     class="bid-input" 
                                     placeholder="Введите вашу ставку (мин. 70 001 ₽)"
-                                    min="70001"
+                                    min={ItemShow.highestBid}
                                     step="100"
                                 />
                                 <Button type="submit" class="btn-bid">Сделать ставку</Button>
@@ -73,7 +76,7 @@ useEffect(() => {
                     </div>
                 </div>
 
-                <div class="bids-section">
+                {/* <div class="bids-section">
                     <div class="bids-header">
                         <h2 class="bids-title">История ставок</h2>
                         <span class="bids-count">5</span>
@@ -134,13 +137,13 @@ useEffect(() => {
                                 </div>
                             </div>
                             <div class="bid-amount">65 500 ₽</div>
-                        </div>
-                    </div>
-                </div>
+                        </div> */}
+                    {/* </div> */}
+                {/* </div> */}
             </div>
-             */}
+            
 
-                {ItemShow}
+   
         </div>
     )
 }

@@ -43,6 +43,10 @@ const deleteItems = async (id) => {
     return res
 }
 
+!!!!!!
+// ТУТ КОРОЧЕ АЙПИШКУ ТЫКНУТЬ, НА НЕЕ ПЕРЕНАПРАВ В ДИТЕЛЕС И ТАМ amount КЛЮЧ И ЗНАЧЕНИЕ ТО ШО ПОЛЬЗОВАТЕЛЬ ВВЕЛ
+!!!!!!!
+
 // const reportItems = async (id) => {
 //     const res = await apiInstance.post(`/messages/${id}/report`)
 //     return res
