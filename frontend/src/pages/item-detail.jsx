@@ -3,12 +3,14 @@ import Input from "../components/Input"
 import Button from "../components/Button"
 import { useEffect, useState } from "react"
 import { useItemStore } from "../store/useItemStore"
+import { api } from "../api/api"
 
 const ItemDetail = () => {
     const { id } = useParams()
     const [ItemShow, setItemShow] = useState(undefined)
     const { items, getItems } = useItemStore()
     const {newBid, setNewBid} = useState()
+
     useEffect(() => {
         const fetch = async () => {
             await getItems()
@@ -24,8 +26,9 @@ const ItemDetail = () => {
 
 
 
-    const handleBid = () => {
-
+    const handleBid = (e) => {
+        e.preventDefault()
+        api.createBid({id: id, amount: e.target.bidInput.value})
     }
     
     return (
@@ -64,11 +67,13 @@ const ItemDetail = () => {
                             <form class="bid-form" onSubmit={handleBid}>
                                 <Input 
                                     type="number" 
+                                    name= "bidInput"
                                     class="bid-input" 
                                     placeholder="Введите вашу ставку (мин. 70 001 ₽)"
                                     min={ItemShow.highestBid}
                                     step="100"
                                 />
+                                <!!!!!! Сделать обновление списка при отправки ставки !!!!!
                                 <Button type="submit" class="btn-bid">Сделать ставку</Button>
                             </form>
                         </div>

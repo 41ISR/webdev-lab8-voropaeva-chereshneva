@@ -43,9 +43,14 @@ const deleteItems = async (id) => {
     return res
 }
 
-!!!!!!
-// ТУТ КОРОЧЕ АЙПИШКУ ТЫКНУТЬ, НА НЕЕ ПЕРЕНАПРАВ В ДИТЕЛЕС И ТАМ amount КЛЮЧ И ЗНАЧЕНИЕ ТО ШО ПОЛЬЗОВАТЕЛЬ ВВЕЛ
-!!!!!!!
+const createBid = async (data) => {
+    const {id, ...amount} = data
+    const res = await apiInstance.post(`/items/${id}/bids`, amount)
+    return res
+}
+// !!!!!!
+// // ТУТ КОРОЧЕ АЙПИШКУ ТЫКНУТЬ, НА НЕЕ ПЕРЕНАПРАВ В ДИТЕЛЕС И ТАМ amount КЛЮЧ И ЗНАЧЕНИЕ ТО ШО ПОЛЬЗОВАТЕЛЬ ВВЕЛ
+// !!!!!!!
 
 // const reportItems = async (id) => {
 //     const res = await apiInstance.post(`/messages/${id}/report`)
@@ -57,6 +62,11 @@ const deleteItems = async (id) => {
 //     return res
 // }
 
+const getStats = async () => {
+    const data = await apiInstance.get("/stats")
+    return data.data
+}
+
 export const api = {
     // likeMessage,
     // reportMessage,
@@ -65,5 +75,7 @@ export const api = {
     loginUser,
     sendItems,
     deleteItems,
-    getItems
+    getItems,
+    createBid,
+    getStats
 }
